@@ -11,6 +11,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="preload" as="image" href="img/phone-home.png">
+<script>
+// Начальные состояния действуют только при классе js. Если GSAP не пришёл за 2 с, снимаем класс: страница видна целиком.
+(function(d){d.classList.add('js');window.motionOff=function(){d.classList.remove('js')};setTimeout(function(){if(!d.classList.contains('live'))motionOff()},2000)})(document.documentElement);
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" integrity="sha512-NcZdtrT77bJr4STcmsGAESr06BYGE8woZdSdEgqnpyqac7sugNO+Tr4bGwGF3MsnEkGKhU2KL2xh6Ec+BqsaHA==" crossorigin="anonymous" referrerpolicy="no-referrer" onerror="motionOff()"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" integrity="sha512-P2IDYZfqSwjcSjX0BKeNhwRUH8zRPGlgcWl5n6gBLzdi4Y5/0O4zaXrtO4K9TZK6Hn1BenYpKowuCavNandERg==" crossorigin="anonymous" referrerpolicy="no-referrer" onerror="motionOff()"></script>
 <style>
 /* 1rem = 10 px макета. Десктоп считается от ширины 1440, мобайл от 390. */
 :root{
@@ -30,8 +38,9 @@ img{display:block}
 .m{display:none}
 .wrap{max-width:144rem;margin:0 auto;position:relative}
 
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:.8rem;height:5.6rem;padding:0 2.4rem;border:0;border-radius:1.8rem;font-weight:800;font-size:1.6rem;line-height:1.2;letter-spacing:-.01em;cursor:pointer;transition:transform .15s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.8rem;height:5.6rem;padding:0 2.4rem;border:0;border-radius:1.8rem;font-weight:800;font-size:1.6rem;line-height:1.2;letter-spacing:-.01em;cursor:pointer;transition:transform .15s,scale var(--t-micro) var(--e-out)}
 .btn:hover{transform:translateY(-.2rem)}
+.btn:active{scale:.97}
 .btn:focus-visible,a:focus-visible,summary:focus-visible,.seg button:focus-visible{outline:.3rem solid var(--ink);outline-offset:.2rem}
 .btn-dark{background:var(--ink);color:#fff}
 .btn-light{background:#fff;color:var(--ink)}
@@ -62,7 +71,7 @@ h1 em{font-style:normal;color:#fff}
 .ribbon{left:50%;width:300rem;height:6.8rem;display:flex;align-items:center;justify-content:center;white-space:nowrap;font-weight:900;font-size:2.8rem;letter-spacing:-.035em}
 .r1{top:47.6rem;background:var(--ink);color:var(--cream);transform:translate(-50%,-50%) rotate(4deg)}
 .r2{top:39rem;background:var(--amber);color:var(--ink);transform:translate(-50%,-50%) rotate(-3deg)}
-.phone{transform-origin:0 0;border-radius:13.9%/6.6%;filter:drop-shadow(0 2.4rem 2.4rem rgba(22,17,14,.3))}
+.phone{transform-origin:0 0;border-radius:13.9%/6.6%;box-shadow:0 2.4rem 4.8rem rgba(22,17,14,.3)}
 .ph-o{left:25rem;top:14.6rem;width:27.3rem;transform:rotate(-8deg)}
 .ph-m{left:92rem;top:11.6rem;width:27.3rem;transform:rotate(8deg)}
 .ph-h{left:55.5rem;top:7.6rem;width:33rem}
@@ -147,8 +156,8 @@ summary{list-style:none;display:flex;align-items:center;justify-content:space-be
 summary::-webkit-details-marker{display:none}
 .tg{flex:none;width:3.6rem;height:3.6rem;border-radius:50%;background:var(--bg);display:grid;place-items:center;color:var(--ink)}
 .tg .ic{width:1.8rem;height:1.8rem}
-.tg .p,details[open] .tg .mn{display:block}
-details[open] .tg .p,.tg .mn{display:none}
+.tg .v{transform-origin:12px 12px;transition:transform var(--t-ui) var(--e-out)}
+details[open]:not(.closing) .tg .v{transform:rotate(90deg)}
 details p{margin-top:1.2rem;color:var(--ink-2)}
 
 .wait{padding:12.8rem 0 0;display:flex;flex-direction:column;align-items:center;text-align:center;scroll-margin-top:2rem}
@@ -161,7 +170,9 @@ details p{margin-top:1.2rem;color:var(--ink-2)}
 .input{flex:1;min-width:0;height:6.4rem;background:#fff;border-radius:2rem;padding:0 2.2rem;display:flex;align-items:center;gap:1rem;color:var(--ink-2)}
 .input input{flex:1;min-width:0;border:0;outline:0;background:none;font-weight:600;font-size:2rem;letter-spacing:-.01em;color:var(--ink)}
 .input input::placeholder{color:var(--ink-2);opacity:1}
-.input:focus-within{box-shadow:0 0 0 .3rem var(--ink)}
+.input{position:relative}
+.input::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 .3rem var(--ink);opacity:0;scale:.985;pointer-events:none;transition:opacity var(--t-micro) var(--e-exit),scale var(--t-micro) var(--e-exit)}
+.input:focus-within::after{opacity:1;scale:1;transition:opacity var(--t-ui) var(--e-out),scale var(--t-ui) var(--e-out)}
 .form .btn{height:6.4rem;border-radius:2rem;flex:none}
 .fine{margin-top:1.6rem;display:flex;align-items:center;gap:.6rem;font-weight:600;font-size:1.4rem;color:rgba(22,17,14,.7)}
 .fine .ic{width:1.5rem;height:1.5rem}
@@ -289,7 +300,94 @@ details p{margin-top:1.2rem;color:var(--ink-2)}
   .tagline{position:static;margin-top:.8rem;font-size:2.8rem;line-height:1.08;letter-spacing:-.035em}
   .copy{margin-top:1.5rem;font-weight:700;font-size:1.2rem}
 }
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
+
+/* Движение. Токены только здесь, JS читает их из этих же переменных. */
+:root{
+  --t-micro:.16s;--t-ui:.32s;--t-big:.8s;--t-stagger:.05s;
+  --e-out:cubic-bezier(.16,1,.3,1);--e-exit:cubic-bezier(.7,0,.84,0);--e-spring:cubic-bezier(.34,1.56,.64,1);
+  --g-out:expo.out;--g-arc:power3.out;--g-exit:power3.in;--g-spring:back.out(1.4);
+}
+html.js:not(.live) :is(.stage .phone,.stage .st,.why .h2,.why .lead,.stat,.steps .h2,.step,.cinema .tag,.cinema img,.catch .h2,.tile,.biz-text>*,.feat,.ph-b,.faq-top,details,.wait>*,.foot .word){opacity:0}
+.track{flex:none;white-space:nowrap}
+.wait,.catch{overflow-x:clip}
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding:.16em .08em .2em;margin:-.16em -.08em -.2em}
+.wi{display:inline-block;position:relative;transform-origin:0 100%}
+.cell{display:inline-block;position:relative;vertical-align:top;clip-path:inset(0 -.3em)}
+.cell>b{font:inherit;visibility:hidden}
+.reel{position:absolute;left:0;top:0;display:flex;flex-direction:column;font-variant-numeric:tabular-nums;letter-spacing:0}
+.reel span{display:flex;justify-content:center}
+.dim{position:absolute;inset:0;border-radius:inherit;background:var(--ink);opacity:0;pointer-events:none}
+.stat,.steps{position:relative}
+.no{position:relative;z-index:1}
+.no::after{content:"";position:absolute;inset:0;border-radius:inherit;background:var(--coral);opacity:0;pointer-events:none}
+.no.pulse::after{animation:pulse var(--t-big) var(--e-out)}
+.prog{position:absolute;width:.2rem;margin-left:-.1rem;border-radius:.1rem;background:rgba(22,17,14,.08)}
+.prog i{position:absolute;inset:0;border-radius:inherit;background:var(--coral);transform:scaleY(0);transform-origin:50% 0}
+.price>span{transform-origin:0 100%}
+.price s.draw{position:relative;text-decoration:none}
+.price s i{position:absolute;left:0;right:0;top:54%;height:.1rem;background:currentColor;transform:scaleX(0);transform-origin:0 50%}
+.ans{display:flow-root}
+.seg.thumbed{position:relative}
+.seg.thumbed button{position:relative;background:none;transition:color var(--t-micro) linear}
+.seg-thumb{position:absolute;inset:.5rem;background:var(--ink);clip-path:inset(0 var(--r,0) 0 var(--l,0) round 2.1rem);transition:clip-path var(--t-ui) var(--e-out)}
+.seg.thumbed .seg-thumb:not(.ready){transition:none}
+.status.in{animation:status var(--t-ui) var(--e-out) backwards}
+.links a{position:relative}
+.links a::after{content:"";position:absolute;left:0;right:0;bottom:-.4rem;height:.2rem;border-radius:.1rem;background:currentColor;transform:scaleX(0);transform-origin:100% 50%;transition:transform var(--t-micro) var(--e-exit)}
+.nav-cta .ic,.cta .ic,.form .ic,.biz .btn .ic{transition:transform var(--t-ui) var(--e-out)}
+.pill{position:relative}
+.pill::after{content:"";position:absolute;left:1.8rem;top:50%;width:.8rem;height:.8rem;margin-top:-.4rem;border-radius:50%;background:#fff;opacity:0;pointer-events:none}
+h1.sp{isolation:isolate}
+h1.sp em{position:relative;display:inline-block}
+h1.sp em::before{content:"";position:absolute;inset:-.4em -.5em;z-index:-1;border-radius:50%;background:radial-gradient(closest-side,rgba(255,244,226,.62),rgba(255,214,160,.26) 58%,rgba(255,214,160,0));opacity:0}
+h1.sp em .wi::after{content:attr(data-t);position:absolute;left:0;top:0;color:var(--ink);pointer-events:none}
+@media (hover:hover){
+  .links a:hover::after,.links a:focus-visible::after{transform:scaleX(1);transform-origin:0 50%;transition:transform var(--t-ui) var(--e-out)}
+  .btn:hover .ic{transform:translateX(.3rem)}
+}
+@media (max-width:999px){
+  .pill::after{left:1.4rem;width:.7rem;height:.7rem;margin-top:-.35rem}
+  .seg-thumb{inset:.4rem;clip-path:inset(0 var(--r,0) 0 var(--l,0) round 2rem)}
+}
+@media (prefers-reduced-motion:no-preference){
+  .pill::after{animation:live 2s var(--e-out) infinite}
+  .pill.off::after{animation-play-state:paused}
+  html.js .nav{animation:drop var(--t-big) var(--e-out) backwards}
+  html.js .nav .word svg{animation:spark var(--t-big) var(--e-out) .5s backwards}
+  html.js .pill{animation:pop .5s var(--e-spring) backwards}
+  h1.sp .wi{animation:rise var(--t-big) var(--e-out) var(--d,0s) backwards}
+  h1.sp em{animation:lift .5s var(--e-out) var(--ig,.8s) backwards}
+  h1.sp em::before{animation:flash .55s var(--e-out) var(--ig,.8s)}
+  h1.sp em .wi::after{animation:ignite var(--t-micro) linear var(--ig,.8s) forwards}
+  html.js .hero .lead{animation:drift var(--t-big) var(--e-out) .3s backwards}
+  html.js .cta .btn{animation:drift var(--t-big) var(--e-out) .38s backwards}
+  html.js .cta .btn+.btn{animation-delay:.44s}
+  @media (hover:hover){
+    .tile{transition:translate var(--t-ui) var(--e-out)}
+    .cover img{transition:translate var(--t-ui) var(--e-out),rotate var(--t-ui) var(--e-out)}
+    .tile:hover{translate:0 -.6rem}
+    .tile:hover .big{translate:-.8rem -.3rem;rotate:-3deg}
+    .tile:hover .small{translate:1rem .3rem;rotate:5deg}
+  }
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .btn,.btn .ic,.tg .v,.seg-thumb,.links a::after,.input::after{transition:none!important}
+  html.js :is(.nav,.pill,h1,.hero .lead,.cta){animation:fade var(--t-ui) linear backwards}
+  .status.in{animation-name:fade}
+}
+@keyframes fade{from{opacity:0}}
+@keyframes drop{from{opacity:0;transform:translateY(-1.2rem)}}
+@keyframes pop{from{opacity:0;transform:scale(.7)}}
+@keyframes rise{from{transform:translateY(135%) rotate(3deg)}}
+@keyframes lift{0%,100%{transform:none}40%{transform:translateY(-.05em)}}
+@keyframes flash{0%{opacity:0;transform:scale(.7)}35%{opacity:1}100%{opacity:0;transform:scale(1.15)}}
+@keyframes ignite{from{opacity:1}to{opacity:0}}
+@keyframes drift{from{opacity:0;transform:translateY(1.6rem)}}
+@keyframes spark{from{transform:scale(0) rotate(-120deg)}}
+@keyframes live{0%{opacity:.7;transform:scale(1)}70%,100%{opacity:0;transform:scale(3.2)}}
+@keyframes pulse{from{opacity:.45;transform:scale(1)}to{opacity:0;transform:scale(1.55)}}
+@keyframes status{from{opacity:0;transform:translateY(.6rem)}}
 </style>
 </head>
 <body>
@@ -302,8 +400,6 @@ details p{margin-top:1.2rem;color:var(--ink-2)}
   <symbol id="message" viewBox="0 0 24 24"><path d="M5 4.5H19C19.3978 4.5 19.7794 4.65804 20.0607 4.93934C20.342 5.22064 20.5 5.60218 20.5 6V16C20.5 16.3978 20.342 16.7794 20.0607 17.0607C19.7794 17.342 19.3978 17.5 19 17.5H11.5L6.5 21V17.5H5C4.60218 17.5 4.22064 17.342 3.93934 17.0607C3.65804 16.7794 3.5 16.3978 3.5 16V6C3.5 5.60218 3.65804 5.22064 3.93934 4.93934C4.22064 4.65804 4.60218 4.5 5 4.5Z"/></symbol>
   <symbol id="lock" viewBox="0 0 24 24"><path d="M16.5 10.5H7.5C6.11929 10.5 5 11.6193 5 13V18C5 19.3807 6.11929 20.5 7.5 20.5H16.5C17.8807 20.5 19 19.3807 19 18V13C19 11.6193 17.8807 10.5 16.5 10.5Z"/><path d="M8.5 10.5V8C8.5 7.07174 8.86875 6.1815 9.52513 5.52513C10.1815 4.86875 11.0717 4.5 12 4.5C12.9283 4.5 13.8185 4.86875 14.4749 5.52513C15.1313 6.1815 15.5 7.07174 15.5 8V10.5"/></symbol>
   <symbol id="list" viewBox="0 0 24 24"><path d="M9 6.5H20M9 12H20M9 17.5H20M4.5 6.5V6.6M4.5 12V12.1M4.5 17.5V17.6" stroke-width="2.2"/></symbol>
-  <symbol id="plus" viewBox="0 0 24 24"><path d="M12 5V19M5 12H19" stroke-width="2.2"/></symbol>
-  <symbol id="minus" viewBox="0 0 24 24"><path d="M5 12H19" stroke-width="2.2"/></symbol>
   <symbol id="spark" viewBox="0 0 24 24"><path d="M12 0C13.44 10.56 13.44 10.56 24 12C13.44 13.44 13.44 13.44 12 24C10.56 13.44 10.56 13.44 0 12C10.56 10.56 10.56 10.56 12 0Z"/></symbol>
 </svg>
 
@@ -346,19 +442,19 @@ details p{margin-top:1.2rem;color:var(--ink-2)}
   <p class="lead"><span class="d">Каждый вечер город теряет выручку. Бизнесу выгоднее продать со скидкой, чем потерять всё. А тебе достаётся то же самое — только дешевле.</span><span class="m">Каждый вечер город теряет выручку. Бизнесу выгоднее продать со скидкой, чем потерять всё. А тебе — то же самое, только дешевле.</span></p>
   <div class="stats">
     <article class="stat">
-      <div class="chip" style="background:var(--cat-bakery)"><img src="img/croissant.png" alt=""></div>
+      <div class="chip" style="background:var(--cat-bakery)"><img decoding="async" src="img/croissant.png" alt=""></div>
       <div class="num">5–15%</div>
       <h3>еды за день уходит в списание</h3>
       <p><span class="d">Выпечка и готовые блюда, которые к закрытию никто не купил.</span><span class="m">Выпечка и блюда, которые к закрытию никто не купил.</span></p>
     </article>
     <article class="stat">
-      <div class="chip" style="background:var(--cat-beauty)"><img src="img/polish.png" alt=""></div>
+      <div class="chip" style="background:var(--cat-beauty)"><img decoding="async" src="img/polish.png" alt=""></div>
       <div class="num">35–60 р.</div>
       <h3>теряет мастер на поздней отмене</h3>
       <p><span class="d">Клиентка отменила за час — найти замену почти невозможно.</span><span class="m">Клиентка отменила за час — замену не найти.</span></p>
     </article>
     <article class="stat">
-      <div class="chip" style="background:var(--cat-cinema)"><img src="img/popcorn.png" alt=""></div>
+      <div class="chip" style="background:var(--cat-cinema)"><img decoding="async" src="img/popcorn.png" alt=""></div>
       <div class="num">0 р.</div>
       <h3><span class="d">приносит пустое кресло после начала</span><span class="m">приносит кресло после начала</span></h3>
       <p><span class="d">Свет погас — непроданный билет больше ничего не стоит.</span><span class="m">Свет погас — билет больше ничего не стоит.</span></p>
@@ -375,7 +471,7 @@ details p{margin-top:1.2rem;color:var(--ink-2)}
   </div>
   <div class="cinema">
     <div class="tag"><svg class="ic" aria-hidden="true"><use href="#clock"/></svg>Кино за 27 мин до сеанса</div>
-    <img class="phone" src="img/phone-orbita.png" alt="Экран приложения: кинотеатр «Орбита»">
+    <img decoding="async" class="phone" src="img/phone-orbita.png" alt="Экран приложения: кинотеатр «Орбита»">
   </div>
 </section>
 
@@ -383,27 +479,27 @@ details p{margin-top:1.2rem;color:var(--ink-2)}
   <h2 class="h2">Весь горящий город — в одной ленте</h2>
   <div class="grid">
     <article class="tile">
-      <div class="cover" style="background:var(--cat-bakery)"><img class="small" src="img/loaf.png" alt=""><img class="big" src="img/croissant.png" alt=""></div>
+      <div class="cover" style="background:var(--cat-bakery)"><img decoding="async" class="small" src="img/loaf.png" alt=""><img decoding="async" class="big" src="img/croissant.png" alt=""></div>
       <div class="tb"><div class="ov">Еда к закрытию</div><h3>Бокс из пекарни</h3><div class="price"><span><b>6,50</b><u> р.</u></span><s>18 р.</s></div></div>
     </article>
     <article class="tile">
-      <div class="cover" style="background:var(--cat-beauty)"><img class="small" src="img/polish.png" alt=""><img class="big" src="img/polish.png" alt=""></div>
+      <div class="cover" style="background:var(--cat-beauty)"><img decoding="async" class="small" src="img/polish.png" alt=""><img decoding="async" class="big" src="img/polish.png" alt=""></div>
       <div class="tb"><div class="ov">Окошки у мастеров</div><h3>Маникюр после отмены</h3><div class="price"><span><b>33</b><u> р.</u></span><s>55 р.</s></div></div>
     </article>
     <article class="tile">
-      <div class="cover" style="background:var(--cat-cinema)"><img class="small" src="img/donut.png" alt=""><img class="big" src="img/popcorn.png" alt=""></div>
+      <div class="cover" style="background:var(--cat-cinema)"><img decoding="async" class="small" src="img/donut.png" alt=""><img decoding="async" class="big" src="img/popcorn.png" alt=""></div>
       <div class="tb"><div class="ov">Кино</div><h3>Кресло перед сеансом</h3><div class="price"><span><b>8</b><u> р.</u></span><s>16 р.</s></div></div>
     </article>
     <article class="tile">
-      <div class="cover" style="background:var(--cat-bread)"><img class="small" src="img/dumbbell.png" alt=""><img class="big" src="img/bowling.png" alt=""></div>
+      <div class="cover" style="background:var(--cat-bread)"><img decoding="async" class="small" src="img/dumbbell.png" alt=""><img decoding="async" class="big" src="img/bowling.png" alt=""></div>
       <div class="tb"><div class="ov">Досуг</div><h3>Боулинг, квесты, фитнес</h3><p class="sub">Тихие часы — со скидкой</p></div>
     </article>
     <article class="tile">
-      <div class="cover" style="background:var(--cat-travel)"><img class="small" src="img/palm.png" alt=""><img class="big" src="img/suitcase.png" alt=""></div>
+      <div class="cover" style="background:var(--cat-travel)"><img decoding="async" class="small" src="img/palm.png" alt=""><img decoding="async" class="big" src="img/suitcase.png" alt=""></div>
       <div class="tb"><div class="ov">Горящие туры</div><h3>Анталья, 7 ночей на двоих</h3><div class="price"><span><b>2 760</b><u> р.</u></span><s>4 180 р.</s></div></div>
     </article>
     <article class="tile dark">
-      <div class="cover"><div class="sum">184,60 р.</div><div class="cap">сэкономлено с ЛАВі</div><img class="big" src="img/croissant.png" alt=""></div>
+      <div class="cover"><div class="sum">184,60 р.</div><div class="cap">сэкономлено с ЛАВі</div><img decoding="async" class="big" src="img/croissant.png" alt=""></div>
       <div class="tb"><div class="ov">Профиль</div><h3>Экономия, которую видно</h3><p class="sub">Рубли, серии недель, уровни</p></div>
     </article>
   </div>
@@ -424,7 +520,7 @@ details p{margin-top:1.2rem;color:var(--ink-2)}
     </div>
     <a class="btn btn-coral" href="#waitlist" data-seg="biz">Стать партнёром <svg class="ic" aria-hidden="true"><use href="#arrow"/></svg></a>
   </div>
-  <img class="phone ph-b" src="img/phone-okoshko.png" alt="Экран приложения: окошко мастера">
+  <img decoding="async" class="phone ph-b" src="img/phone-okoshko.png" alt="Экран приложения: окошко мастера">
 </section>
 
 <section class="card faq" id="faq">
@@ -433,12 +529,12 @@ details p{margin-top:1.2rem;color:var(--ink-2)}
     <div class="ask"><svg class="ic" aria-hidden="true"><use href="#message"/></svg>Не нашёл ответ? Напиши нам в Telegram</div>
   </div>
   <div class="qs">
-    <details open><summary>Почему так дёшево?<span class="tg"><svg class="ic mn" aria-hidden="true"><use href="#minus"/></svg><svg class="ic p" aria-hidden="true"><use href="#plus"/></svg></span></summary><p><span class="d">Потому что через час это пропадёт: еду спишут, окошко останется пустым, кресло — незанятым. Заведению выгоднее продать со скидкой, чем не продать вовсе.</span><span class="m">Через час это пропадёт: еду спишут, окошко останется пустым, кресло — незанятым. Продать со скидкой выгоднее, чем не продать вовсе.</span></p></details>
-    <details open><summary>Что лежит в боксе?<span class="tg"><svg class="ic mn" aria-hidden="true"><use href="#minus"/></svg><svg class="ic p" aria-hidden="true"><use href="#plus"/></svg></span></summary><p>То, что осталось к закрытию. Точный состав заранее не знает даже заведение, но в карточке видно, что обычно бывает внутри — по прошлым заказам.</p></details>
-    <details open><summary>Как оплатить и забрать?<span class="tg"><svg class="ic mn" aria-hidden="true"><use href="#minus"/></svg><svg class="ic p" aria-hidden="true"><use href="#plus"/></svg></span></summary><p><span class="d">Картой или через ЕРИП прямо в приложении. Приходишь в указанное время и показываешь код — в кафе, у мастера или на входе в зал.</span><span class="m">Картой или через ЕРИП в приложении. Приходишь в указанное время и показываешь код.</span></p></details>
-    <details open><summary>Можно выбрать место в кино?<span class="tg"><svg class="ic mn" aria-hidden="true"><use href="#minus"/></svg><svg class="ic p" aria-hidden="true"><use href="#plus"/></svg></span></summary><p>Нет — места назначаются автоматически из оставшихся, поэтому и дешевле. Если ловишь два билета, посадим рядом.</p></details>
-    <details open><summary>Сколько стоит приложение?<span class="tg"><svg class="ic mn" aria-hidden="true"><use href="#minus"/></svg><svg class="ic p" aria-hidden="true"><use href="#plus"/></svg></span></summary><p>Для тебя — бесплатно. Платишь только за то, что поймал. Подписка ЛАВі Плюс с ранним доступом к горящему — по желанию.</p></details>
-    <details open><summary>Когда запуск?<span class="tg"><svg class="ic mn" aria-hidden="true"><use href="#minus"/></svg><svg class="ic p" aria-hidden="true"><use href="#plus"/></svg></span></summary><p>Скоро — сначала в Минске. Оставь контакт ниже, и мы напишем, как только откроемся.</p></details>
+    <details open><summary>Почему так дёшево?<span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12H19" stroke-width="2.2"/><path class="v" d="M12 5V19" stroke-width="2.2"/></svg></span></summary><p><span class="d">Потому что через час это пропадёт: еду спишут, окошко останется пустым, кресло — незанятым. Заведению выгоднее продать со скидкой, чем не продать вовсе.</span><span class="m">Через час это пропадёт: еду спишут, окошко останется пустым, кресло — незанятым. Продать со скидкой выгоднее, чем не продать вовсе.</span></p></details>
+    <details open><summary>Что лежит в боксе?<span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12H19" stroke-width="2.2"/><path class="v" d="M12 5V19" stroke-width="2.2"/></svg></span></summary><p>То, что осталось к закрытию. Точный состав заранее не знает даже заведение, но в карточке видно, что обычно бывает внутри — по прошлым заказам.</p></details>
+    <details open><summary>Как оплатить и забрать?<span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12H19" stroke-width="2.2"/><path class="v" d="M12 5V19" stroke-width="2.2"/></svg></span></summary><p><span class="d">Картой или через ЕРИП прямо в приложении. Приходишь в указанное время и показываешь код — в кафе, у мастера или на входе в зал.</span><span class="m">Картой или через ЕРИП в приложении. Приходишь в указанное время и показываешь код.</span></p></details>
+    <details open><summary>Можно выбрать место в кино?<span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12H19" stroke-width="2.2"/><path class="v" d="M12 5V19" stroke-width="2.2"/></svg></span></summary><p>Нет — места назначаются автоматически из оставшихся, поэтому и дешевле. Если ловишь два билета, посадим рядом.</p></details>
+    <details open><summary>Сколько стоит приложение?<span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12H19" stroke-width="2.2"/><path class="v" d="M12 5V19" stroke-width="2.2"/></svg></span></summary><p>Для тебя — бесплатно. Платишь только за то, что поймал. Подписка ЛАВі Плюс с ранним доступом к горящему — по желанию.</p></details>
+    <details open><summary>Когда запуск?<span class="tg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12H19" stroke-width="2.2"/><path class="v" d="M12 5V19" stroke-width="2.2"/></svg></span></summary><p>Скоро — сначала в Минске. Оставь контакт ниже, и мы напишем, как только откроемся.</p></details>
   </div>
 </section>
 
@@ -471,14 +567,28 @@ details p{margin-top:1.2rem;color:var(--ink-2)}
 
 <script>
 const segBtns=[...document.querySelectorAll('.seg button')];
-const setSeg=v=>segBtns.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===v)));
+const seg=document.querySelector('.seg'),thumb=document.createElement('span');
+thumb.className='seg-thumb';thumb.setAttribute('aria-hidden','true');
+seg.prepend(thumb);seg.classList.add('thumbed');
+// Фон переключателя ездит за активной кнопкой, в том числе когда её включили ссылкой «Стать партнёром».
+const moveThumb=()=>{
+  const b=segBtns.find(x=>x.getAttribute('aria-pressed')==='true').getBoundingClientRect(),t=thumb.getBoundingClientRect();
+  thumb.style.setProperty('--l',Math.max(0,b.left-t.left)+'px');
+  thumb.style.setProperty('--r',Math.max(0,t.right-b.right)+'px');
+};
+const setSeg=v=>{segBtns.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===v)));moveThumb()};
+moveThumb();
+addEventListener('resize',moveThumb);
+document.fonts&&document.fonts.ready.then(()=>{moveThumb();requestAnimationFrame(()=>thumb.classList.add('ready'))});
 segBtns.forEach(b=>b.addEventListener('click',()=>setSeg(b.dataset.v)));
 document.querySelectorAll('[data-seg]').forEach(a=>a.addEventListener('click',()=>setSeg(a.dataset.seg)));
 
 // Пробная версия: заявки никуда не уходят, адрес приёма не задан.
+const statusEl=document.getElementById('status');
 document.getElementById('form').addEventListener('submit',e=>{
   e.preventDefault();
-  document.getElementById('status').textContent='Пробная версия: заявки пока не принимаются.';
+  statusEl.textContent='Пробная версия: заявки пока не принимаются.';
+  statusEl.classList.remove('in');void statusEl.offsetWidth;statusEl.classList.add('in');
 });
 
 const menu=document.getElementById('menu'),menuBtn=document.getElementById('menuBtn');
@@ -490,6 +600,484 @@ menu.addEventListener('click',closeMenu);
 const items=document.querySelectorAll('.qs details');
 if(matchMedia('(max-width:999px)').matches){
   items.forEach((d,i)=>{if(i!==0&&i!==2)d.open=false});
+}
+
+// Деление на слова, а не на жёсткие строки: переносы остаются за браузером, после анимации разметка возвращается как была.
+const splitWords=el=>{
+  const orig=el.innerHTML,words=[];
+  const walk=n=>[...n.childNodes].forEach(c=>{
+    if(c.nodeType!==3)return walk(c);
+    const f=document.createDocumentFragment();
+    c.textContent.split(/(\s+)/).forEach(t=>{
+      if(!t)return;
+      if(!t.trim())return f.append(t);
+      const w=document.createElement('span'),i=document.createElement('span');
+      w.className='w';i.className='wi';i.textContent=t;i.dataset.t=t;w.append(i);f.append(w);words.push(i);
+    });
+    c.replaceWith(f);
+  });
+  walk(el);
+  const delays=()=>{let top,line=-1,k=0;return words.map(i=>{const t=Math.round(i.parentNode.getBoundingClientRect().top);if(t!==top){top=t;line++;k=0}return line*.1+k++*.035})};
+  return {words,delays,revert(){el.innerHTML=orig}};
+};
+window.LAVI={splitWords};
+
+// Первый экран идёт на CSS: текст не ждёт CDN и появляется с первой отрисовки.
+if(!matchMedia('(prefers-reduced-motion:reduce)').matches){
+  const h1=document.querySelector('h1'),sp=splitWords(h1),ds=sp.delays();
+  const em=h1.querySelector('em .wi');
+  sp.words.forEach((w,i)=>w.style.setProperty('--d',ds[i]+'s'));
+  const last=Math.max(...ds)+.06;
+  em.style.setProperty('--d',last+'s');
+  h1.style.setProperty('--ig',last+.3+'s');
+  h1.classList.add('sp');
+  h1.addEventListener('animationend',e=>{if(e.animationName==='ignite'){h1.classList.remove('sp');sp.revert()}});
+}
+</script>
+<script type="module">
+const html=document.documentElement;
+try{
+  if(html.classList.contains('js')){
+    if(!window.gsap||!window.ScrollTrigger)throw new Error('gsap');
+    boot();
+  }
+}catch(e){motionOff()}
+
+function boot(){
+  const {gsap,ScrollTrigger}=window;
+  gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.config({ignoreMobileResize:true});
+
+  const css=getComputedStyle(html),token=n=>css.getPropertyValue(n).trim();
+  const M={micro:parseFloat(token('--t-micro')),ui:parseFloat(token('--t-ui')),big:parseFloat(token('--t-big')),stagger:parseFloat(token('--t-stagger')),out:token('--g-out'),arc:token('--g-arc'),exit:token('--g-exit'),spring:token('--g-spring')};
+  const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const wide=innerWidth>=1000;
+  const rem=()=>parseFloat(getComputedStyle(html).fontSize);
+  const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+  // Одна запись на элемент: translate, rotate и scale складываются с transform из CSS и не затирают значения брейкпоинтов.
+  const write=(el,p)=>{
+    el.style.translate=p.yp?`${p.x}rem calc(${p.y}rem + ${p.yp}%)`:`${p.x}rem ${p.y}rem`;
+    el.style.rotate=p.r+'deg';el.style.scale=p.s;el.style.opacity=p.o;
+  };
+  const clear=el=>{for(const k of ['translate','rotate','scale','opacity','willChange'])el.style[k]=''};
+  const held=new Map();
+  const hide=(el,from={})=>{
+    const p={x:0,y:0,yp:0,r:0,s:1,o:1,...(reduce?{o:0}:from)};
+    held.set(el,p);write(el,p);
+  };
+  const play=(el,{d=M.big,e=M.out,ey,delay=0,fade,done}={})=>{
+    const p=held.get(el);if(!p)return;
+    held.delete(el);
+    if(reduce){d=M.ui;e='none';ey=0;delay=0;fade=0}
+    el.style.willChange='translate,rotate,scale,opacity';
+    return gsap.timeline({delay,onUpdate:()=>write(el,p),onComplete:()=>{clear(el);done&&done()}})
+      .to(p,{x:0,r:0,s:1,yp:0,duration:d,ease:e},0)
+      .to(p,{y:0,duration:d,ease:ey||e},0)
+      .to(p,{o:1,duration:fade||Math.min(d,M.ui),ease:'none'},0);
+  };
+  const once=(trigger,fn,start='top 84%')=>ScrollTrigger.create({trigger,start,once:true,onEnter:fn});
+
+  initHero();
+  sceneWhy();
+  sceneSteps();
+  sceneCinema();
+  sceneTiles();
+  sceneBiz();
+  sceneFaq();
+  sceneWait();
+  magnets();
+  html.classList.add('live');
+
+  // Заголовок поднимается из маски словами, строка за строкой. После анимации разметка возвращается как была.
+  function head(el,{rot=2,start}={}){
+    if(reduce){hide(el);return once(el,()=>play(el),start)}
+    const sp=LAVI.splitWords(el);
+    sp.words.forEach(w=>hide(w,{yp:135,r:rot}));
+    once(el,()=>{
+      const ds=sp.delays();
+      sp.words.forEach((w,i)=>play(w,{delay:ds[i]}));
+      gsap.delayedCall(Math.max(...ds)+M.big+.05,sp.revert);
+    },start);
+  }
+
+  // Счётчик-барабан: цифры катятся через transform, ширина и текст вокруг не меняются. На последнем кадре возвращается исходная строка.
+  function roll(el,{delay=0,d=.9,down=false}={}){
+    if(reduce)return;
+    const orig=el.innerHTML,text=el.textContent,cs=getComputedStyle(el);
+    const fs=parseFloat(cs.fontSize),ls=(parseFloat(cs.letterSpacing)||0)/fs,lh=parseFloat(cs.lineHeight)/fs;
+    const reels=[];
+    el.setAttribute('aria-label',text);el.textContent='';
+    let idx=0;
+    for(const ch of text){
+      if(!/\d/.test(ch)){el.append(ch);continue}
+      const n=+ch,steps=down?10:n+10*(1+idx%3);
+      const seq=Array.from({length:steps+(down?0:1)},(_,i)=>down?9-i:i%10);
+      const cell=document.createElement('span'),ghost=document.createElement('b'),reel=document.createElement('span');
+      cell.className='cell';ghost.textContent=ch;reel.className='reel';reel.style.right=ls+'em';
+      reel.innerHTML=seq.map(v=>`<span style="height:${lh}em;line-height:${lh}em">${v}</span>`).join('');
+      reel.style.willChange='transform';
+      cell.append(ghost,reel);el.append(cell);
+      reels.push(reel);idx++;
+    }
+    const tl=gsap.timeline({delay,onComplete(){el.innerHTML=orig;el.removeAttribute('aria-label')}});
+    reels.forEach((r,i)=>{
+      const k=r.children.length;
+      tl.to(r,{yPercent:-(k-1)/k*100,duration:d+i*.06,ease:down?'power2.inOut':M.arc},i*.05);
+    });
+    return tl;
+  }
+
+  function sceneWhy(){
+    head($('.why .h2'));
+    const lead=$('.why .lead');
+    hide(lead,{y:1.6,o:0});
+    once(lead,()=>play(lead,{delay:.15}));
+    const cards=$$('.stat');
+    cards.forEach((c,i)=>{
+      // Карточки раздаются из одной стопки, как билеты.
+      hide(c,wide?{x:-(i+1)*9,y:4,r:-2-i*1.5,o:0}:{y:4,r:-1.5,o:0});
+      hide($('.chip img',c),{s:.2,r:-40,o:0});
+    });
+    once('.stats',()=>cards.forEach((c,i)=>{
+      const delay=i*.08;
+      play(c,{delay});
+      play($('.chip img',c),{delay:delay+.18,d:.6,e:M.spring});
+      const last=i===cards.length-1;
+      roll($('.num',c),{delay:delay+.12,down:last});
+      if(last&&!reduce){
+        // Свет в зале: карточка чуть гаснет, пока счёт идёт к нулю.
+        const dim=document.createElement('i');dim.className='dim';c.append(dim);
+        gsap.timeline({delay:delay+.3,onComplete:()=>dim.remove()})
+          .to(dim,{opacity:.14,duration:.6,ease:'none'})
+          .to(dim,{opacity:0,duration:M.big,ease:'power2.inOut'},'+=.25');
+      }
+    }));
+  }
+
+  function sceneSteps(){
+    const box=$('.steps'),steps=$$('.step');
+    head($('.steps .h2'));
+    let free=0;
+    steps.forEach(step=>{
+      const no=$('.no',step),body=no.nextElementSibling;
+      hide(no,{s:.4,r:-25,o:0});hide(body,{x:2.4,o:0});
+      once(step,()=>{
+        // Шаги загораются строго по очереди, даже если все три попали в кадр разом.
+        const now=gsap.ticker.time,at=Math.max(now,free);free=at+.2;
+        const delay=at-now;
+        play(no,{delay,d:.55,e:M.spring});
+        play(body,{delay:delay+.06});
+        if(!reduce)gsap.delayedCall(delay+.16,()=>no.classList.add('pulse'));
+      },'top 82%');
+    });
+    if(reduce)return;
+    const line=document.createElement('i'),fill=document.createElement('i');
+    line.className='prog';line.append(fill);box.prepend(line);
+    const place=()=>{
+      const a=$('.no',steps[0]),b=$('.no',steps[2]);
+      const top=a.offsetTop+a.offsetHeight;
+      line.style.left=a.offsetLeft+a.offsetWidth/2+'px';
+      line.style.top=top+'px';
+      line.style.height=b.offsetTop-top+'px';
+    };
+    place();
+    ScrollTrigger.addEventListener('refreshInit',place);
+    gsap.to(fill,{scaleY:1,ease:'none',scrollTrigger:{trigger:steps[0],endTrigger:steps[2],start:'top 66%',end:'top 60%',scrub:.4}});
+  }
+
+  function sceneCinema(){
+    const tag=$('.cinema .tag'),img=$('.cinema img');
+    hide(tag,{o:0});hide(img,{y:5,o:0});
+    once('.cinema',()=>{
+      play(img,{d:.9,fade:.9});
+      play(tag,{delay:.3,d:M.ui,done(){
+        if(reduce)return;
+        // Амбер мигает один раз, как табло перед сеансом.
+        gsap.timeline({onComplete:()=>gsap.set(tag,{clearProps:'opacity'})}).to(tag,{opacity:.25,duration:.1}).to(tag,{opacity:1,duration:.16});
+      }});
+    },'top 72%');
+  }
+
+  function sceneTiles(){
+    const cols=wide?3:1;
+    $$('.tile').forEach((t,i)=>{
+      const col=i%cols,side=wide?col-1:0;
+      const big=$('.big',t),small=$('.small',t),old=$('.price s',t),now=$('.price>span',t),sum=$('.sum',t);
+      hide(t,{x:side*3,y:7,r:side*2||-1.2,o:0});
+      hide(big,{x:-15,y:9,r:-35,s:.7,o:0});
+      if(small)hide(small,{x:15,y:-7,r:30,s:.7,o:0});
+      let stroke;
+      if(old&&!reduce){
+        stroke=document.createElement('i');old.classList.add('draw');old.append(stroke);
+        hide(now,{s:1.3,o:0});
+      }
+      once(t,()=>{
+        const delay=col*.07;
+        play(t,{delay});
+        play(big,{delay:delay+.1,d:.62,e:M.spring});
+        if(small)play(small,{delay:delay+.17,d:.62,e:M.spring});
+        if(sum)roll(sum,{delay:delay+.15,d:.9});
+        if(stroke)gsap.to(stroke,{scaleX:1,duration:M.ui,delay:delay+.32,ease:'power2.inOut',onComplete(){
+          // Старая цена зачёркнута, новая встаёт с акцентом. Линия уступает обычному зачёркиванию из вёрстки.
+          play(now,{d:.45});
+          old.classList.remove('draw');stroke.remove();
+        }});
+      },'top 90%');
+    });
+    const h=$('.catch .h2');
+    head(h,{rot:-2});
+  }
+
+  function sceneBiz(){
+    const badge=$('.biz .badge'),lead=$('.biz .lead'),btn=$('.biz .btn'),phone=$('.ph-b'),feats=$$('.feat');
+    hide(badge,{s:.6,o:0});
+    head($('.biz .h2'));
+    hide(lead,{y:1.6,o:0});
+    hide(btn,{y:1.6,o:0});
+    feats.forEach(f=>hide(f,{y:2.4,o:0}));
+    hide(phone,{x:wide?20:6,y:wide?9:12,r:11,o:0});
+    once(badge,()=>{play(badge,{d:.5,e:M.spring});play(lead,{delay:.25})});
+    // Преимущества приходят парами: на десктопе это ряд, на мобайле соседние строки.
+    once('.feats',()=>feats.forEach((f,i)=>play(f,{delay:(i>>1)*.1+(i%2)*.03})));
+    once(btn,()=>play(btn),'top 94%');
+    once(phone,()=>play(phone,{d:.9,e:'back.out(1.1)',ey:M.out}),wide?'top 78%':'top 88%');
+    if(reduce)return;
+    const g=$('.glow');
+    const breath=gsap.to(g,{scale:1.14,opacity:.74,duration:2.8,repeat:-1,yoyo:true,ease:'sine.inOut',paused:true});
+    ScrollTrigger.create({trigger:'.biz',start:'top bottom',end:'bottom top',onToggle(s){
+      s.isActive?breath.play():breath.pause();
+      g.style.willChange=s.isActive?'transform,opacity':'';
+    }});
+    gsap.to(g,{yPercent:16,xPercent:-8,ease:'none',scrollTrigger:{trigger:'.biz',start:'top bottom',end:'bottom top',scrub:.6}});
+  }
+
+  function sceneFaq(){
+    const top=$('.faq-top'),ds=$$('.qs details');
+    hide(top,{y:2,o:0});
+    once(top,()=>play(top));
+    ds.forEach((d,i)=>{
+      hide(d,{y:3,o:0});
+      once(d,()=>play(d,{delay:(i%2)*.06}),'top 92%');
+    });
+    if(reduce)return;
+    // Единственное исключение из правила transform/opacity: высоту ответа без скачка иначе не показать, сдвигается всё, что ниже.
+    let pending;
+    const refresh=()=>{pending&&pending.kill();pending=gsap.delayedCall(.05,()=>ScrollTrigger.refresh())};
+    ds.forEach(d=>{
+      const p=$('p',d),ans=document.createElement('div');
+      ans.className='ans';d.insertBefore(ans,p);ans.append(p);
+      let tl;
+      $('summary',d).addEventListener('click',e=>{
+        e.preventDefault();
+        const opening=!d.open||d.classList.contains('closing');
+        const from=d.open?ans.offsetHeight:0;
+        tl&&tl.kill();
+        ans.style.overflow='hidden';
+        if(opening){
+          d.classList.remove('closing');d.open=true;
+          ans.style.height='auto';
+          const h=ans.offsetHeight;
+          ans.style.height=from+'px';
+          tl=gsap.timeline({onComplete(){gsap.set(ans,{clearProps:'height,overflow'});gsap.set(p,{clearProps:'opacity,transform'});refresh()}})
+            .to(ans,{height:h,duration:M.ui+.08,ease:M.out},0)
+            .fromTo(p,{opacity:0,y:8},{opacity:1,y:0,duration:M.ui,ease:M.out},.04);
+        }else{
+          d.classList.add('closing');
+          tl=gsap.timeline({onComplete(){d.open=false;d.classList.remove('closing');gsap.set(ans,{clearProps:'height,overflow'});gsap.set(p,{clearProps:'opacity,transform'});refresh()}})
+            .to(p,{opacity:0,duration:M.micro,ease:'none'},0)
+            .to(ans,{height:0,duration:M.ui-.06,ease:M.exit},0);
+        }
+      });
+    });
+  }
+
+  function sceneWait(){
+    const h=$('.wait .h2'),rest=$$('.wait .lead,.seg,.form,.fine');
+    rest.forEach(el=>hide(el,{y:1.8,o:0}));
+    const reveal=()=>rest.forEach((el,i)=>play(el,{delay:.2+i*M.stagger}));
+    if(reduce){
+      hide(h);
+      once(h,()=>{play(h);reveal()});
+    }else{
+      // Заголовок собирается из разлетевшихся слов: последний пойманный акцент страницы.
+      const sp=LAVI.splitWords(h),mid=(sp.words.length-1)/2;
+      sp.words.forEach((w,i)=>{
+        w.parentNode.style.overflow='visible';
+        const k=i-mid;
+        hide(w,{x:k*(wide?7:2.5),y:6+Math.abs(k)*2.5,r:k*7,o:0});
+      });
+      once(h,()=>{
+        sp.words.forEach((w,i)=>play(w,{delay:i*M.stagger,d:.7,ey:M.arc}));
+        gsap.delayedCall(sp.words.length*M.stagger+.75,sp.revert);
+        reveal();
+      });
+    }
+    const word=$('.foot .word'),orig=word.innerHTML;
+    if(reduce){
+      hide(word);
+      return once(word,()=>play(word),'top 96%');
+    }
+    const spark=$('svg',word),chars=[];
+    const mask=node=>{
+      const f=document.createDocumentFragment();
+      for(const ch of node.textContent){
+        const w=document.createElement('span'),i=document.createElement('span');
+        w.className='w';i.className='wi';i.textContent=ch;w.append(i);f.append(w);chars.push(i);
+      }
+      node.replaceWith(f);
+    };
+    [...word.childNodes].filter(n=>n.nodeType===3).forEach(mask);
+    mask($('i',word).firstChild);
+    chars.forEach(c=>hide(c,{yp:135}));
+    hide(spark,{s:0,r:-140,o:0});
+    once(word,()=>{
+      chars.forEach((c,i)=>play(c,{delay:i*.07,d:.7}));
+      // Искра вспыхивает последней, с лёгким поворотом.
+      play(spark,{delay:chars.length*.07+.25,d:.6,e:M.spring,done(){word.innerHTML=orig}});
+    },'top 96%');
+  }
+
+  // Магнитность только у главных CTA и только с мышью. Канал translate свободен: hover кнопки идёт через transform.
+  function magnets(){
+    if(reduce)return;
+    gsap.matchMedia().add('(hover:hover) and (pointer:fine) and (min-width:1000px)',()=>{
+      const offs=$$('.cta .btn-dark,.biz .btn-coral,.form .btn-dark').map(b=>{
+        const p={x:0,y:0},apply=()=>{b.style.translate=`${p.x}px ${p.y}px`};
+        const go=(x,y,d)=>gsap.to(p,{x,y,duration:d,ease:M.out,overwrite:true,onUpdate:apply});
+        const move=e=>{const r=b.getBoundingClientRect();go((e.clientX-r.left-r.width/2)*.16,(e.clientY-r.top-r.height/2)*.26,M.ui)};
+        const out=()=>go(0,0,M.big);
+        b.addEventListener('pointermove',move);b.addEventListener('pointerleave',out);
+        return ()=>{b.removeEventListener('pointermove',move);b.removeEventListener('pointerleave',out);b.style.translate=''};
+      });
+      return ()=>offs.forEach(f=>f());
+    });
+  }
+
+  function initHero(){
+    const stage=$('.stage'),h=$('.ph-h');
+    const pos=el=>({x:el.offsetLeft/rem(),y:el.offsetTop/rem(),w:el.offsetWidth/rem()});
+    const baseAngle=el=>{const m=new DOMMatrix(getComputedStyle(el).transform);return Math.atan2(m.b,m.a)*180/Math.PI};
+    const hp=pos(h);
+    const rig=(sel,o)=>{const el=$(sel);return {el,ex:0,ey:0,er:0,es:1,eo:1,sx:0,sy:0,sr:0,mx:0,my:0,fy:0,fr:0,on:false,...o}};
+    const fan=(sel,o)=>{
+      const el=$(sel),p=pos(el);
+      return rig(sel,{...o,ex:reduce?0:hp.x-p.x,ey:reduce?0:hp.y-p.y+7,er:reduce?0:-baseAngle(el),eo:0});
+    };
+    const sticker=(sel,spin,o)=>{
+      const el=$(sel),p=pos(el);
+      if(reduce)return rig(sel,{eo:0,...o});
+      return rig(sel,{ex:(hp.x+hp.w/2-p.x-p.w/2)*.5,ey:8,er:spin,es:.25,eo:0,fa:.5,fw:1.1+Math.random()*.3,fp:Math.random()*6,...o});
+    };
+    const ph={h:rig('.ph-h',{ey:reduce?0:30,eo:0,dp:.6}),o:fan('.ph-o',{dp:1.1}),m:fan('.ph-m',{dp:1.1})};
+    const st=[sticker('.s1',-70,{dp:2.6}),sticker('.s2',60,{dp:-2.2}),sticker('.s3',50,{dp:-3}),sticker('.s4',-60,{dp:3.2})];
+    const rigs=[ph.o,ph.m,ph.h,...st];
+    let mouseX=0,mouseY=0,last=0,live=false;
+
+    const paint=t=>{
+      const k=1-Math.exp(-(t-last)*5);last=t;
+      for(const r of rigs){
+        r.mx+=(mouseX*r.dp-r.mx)*k;r.my+=(mouseY*r.dp*.6-r.my)*k;
+        const fl=r.on&&r.fa?Math.sin(t*r.fw+r.fp):0;
+        const x=r.ex+r.sx+r.mx,y=r.ey+r.sy+r.my+fl*r.fa,a=r.er+r.sr+fl*1.4;
+        r.el.style.translate=`${x.toFixed(3)}rem ${y.toFixed(3)}rem`;
+        r.el.style.rotate=a.toFixed(3)+'deg';
+        r.el.style.scale=r.es.toFixed(4);
+        r.el.style.opacity=r.eo.toFixed(3);
+      }
+    };
+    paint(0);
+
+    const ribbons=reduce?[]:$$('.ribbon').map((el,i)=>makeRibbon(el,i?-1:1));
+    let boost=1,st0;
+    const tick=t=>{
+      paint(t);
+      if(!ribbons.length)return;
+      const dt=gsap.ticker.deltaRatio()/60;
+      const v=st0?Math.abs(st0.getVelocity()):0;
+      boost+=(1+Math.min(v/320,7)-boost)*(1-Math.exp(-dt*6));
+      for(const r of ribbons)r.step(dt*boost);
+    };
+    const setLive=on=>{
+      if(on===live)return;live=on;
+      gsap.ticker[on?'add':'remove'](tick);
+      for(const r of rigs)r.el.style.willChange=on?'translate,rotate,scale,opacity':'';
+      for(const r of ribbons)r.track.style.willChange=on?'transform':'';
+      $('.pill').classList.toggle('off',!on);
+    };
+    st0=ScrollTrigger.create({trigger:'.hero',start:'top bottom',end:'bottom top',onToggle:s=>setLive(s.isActive)});
+    setLive(scrollY<stage.offsetTop+stage.offsetHeight);
+    ScrollTrigger.addEventListener('refresh',()=>ribbons.forEach(r=>r.measure()));
+
+    const entrance=()=>{
+      const tl=gsap.timeline({delay:reduce?0:.08});
+      if(reduce){
+        tl.to([ph.h,ph.o,ph.m,st[0],st[1]],{eo:1,duration:M.ui,ease:'none'});
+        return;
+      }
+      tl.to(ph.h,{ey:0,duration:M.big+.1,ease:M.out},0).to(ph.h,{eo:1,duration:M.micro,ease:'none'},0);
+      for(const [i,r] of [ph.o,ph.m].entries()){
+        const t=.08+i*.04;
+        tl.to(r,{ex:0,er:0,duration:M.big,ease:M.out},t).to(r,{ey:0,duration:M.big,ease:M.arc},t).to(r,{eo:1,duration:.1,ease:'none'},t+.04);
+      }
+      st.slice(0,2).forEach((r,i)=>flyIn(tl,r,.34+i*.07));
+    };
+    const flyIn=(tl,r,t)=>{
+      tl.to(r,{ex:0,er:0,es:1,duration:.62,ease:M.spring},t).to(r,{ey:0,duration:.62,ease:M.out},t).to(r,{eo:1,duration:.1,ease:'none'},t);
+      tl.call(()=>{r.on=true},null,t+.62);
+    };
+    const ready=Promise.race([Promise.all([ph.h,ph.o,ph.m].map(r=>r.el.decode().catch(()=>{}))),new Promise(r=>setTimeout(r,250))]);
+    ready.then(()=>once(stage,entrance,'top 94%'));
+    if(innerWidth>=1000)once('.s3',()=>{
+      if(reduce)return gsap.to(st.slice(2),{eo:1,duration:M.ui,ease:'none'});
+      const tl=gsap.timeline();st.slice(2).forEach((r,i)=>flyIn(tl,r,i*.07));
+    },'top 92%');
+
+    if(reduce)return;
+    const mm=gsap.matchMedia();
+    mm.add({wide:'(min-width:1000px)',narrow:'(max-width:999px)'},ctx=>{
+      const f=ctx.conditions.wide?1:.5;
+      const scrub=(r,to)=>gsap.to(r,{...to,ease:'none',scrollTrigger:{trigger:stage,start:'clamp(top 72%)',end:'bottom top',scrub:.5}});
+      scrub(ph.h,{sy:22*f});
+      scrub(ph.o,{sx:-7*f,sy:9*f,sr:-3});
+      scrub(ph.m,{sx:7*f,sy:13*f,sr:3});
+      scrub(st[0],{sy:-9*f,sr:16});
+      scrub(st[1],{sy:-13*f,sr:-14});
+      if(ctx.conditions.wide){scrub(st[2],{sy:-5,sr:12});scrub(st[3],{sy:-7,sr:-10})}
+    });
+    mm.add('(hover:hover) and (pointer:fine) and (min-width:1000px)',()=>{
+      const move=e=>{mouseX=e.clientX/innerWidth*2-1;mouseY=e.clientY/innerHeight*2-1};
+      const out=()=>{mouseX=mouseY=0};
+      addEventListener('pointermove',move,{passive:true});
+      html.addEventListener('pointerleave',out);
+      return ()=>{removeEventListener('pointermove',move);html.removeEventListener('pointerleave',out);out()};
+    });
+  }
+
+  // Лента: дорожка из повторов текста сдвигается ровно на один период, поэтому шва нет.
+  function makeRibbon(el,dir){
+    const parts=el.textContent.trim().split(/\s+✦\s+/);
+    const n=parts.indexOf(parts[0],1);
+    const unit=parts.slice(0,n).join('  ✦  ')+'  ✦  ';
+    const track=document.createElement('div');track.className='track';
+    const add=()=>{const s=document.createElement('span');s.textContent=unit;track.append(s)};
+    add();add();
+    el.textContent='';el.append(track);
+    let period=0,x=0;
+    const measure=()=>{
+      period=track.children[1].offsetLeft-track.children[0].offsetLeft;
+      const need=Math.ceil(el.offsetWidth/period)+3;
+      while(track.children.length<need)add();
+      period=(track.lastChild.offsetLeft-track.firstChild.offsetLeft)/(track.children.length-1);
+    };
+    measure();
+    document.fonts.ready.then(measure);
+    return {track,measure,step(dt){
+      if(!period)return;
+      x=(x+dt*rem()*7)%period;
+      track.style.transform=`translate3d(${(dir>0?-x:x-period).toFixed(2)}px,0,0)`;
+    }};
+  }
 }
 </script>
 </body>
