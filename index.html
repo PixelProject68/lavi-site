@@ -34,7 +34,7 @@ body{margin:0;
   background:radial-gradient(70rem 44rem at 50% 26rem,rgba(255,196,140,.5),rgba(255,196,140,0) 70%) 50% 0/100% 160rem no-repeat,
     radial-gradient(90rem 40rem at 50% 104rem,rgba(255,178,30,.34),rgba(255,178,30,0) 70%) 50% 0/100% 160rem no-repeat,
     linear-gradient(180deg,#EF7A45 0,var(--coral) 70rem,#DE5523 130rem,var(--coral) 160rem) 50% 0/100% 160rem no-repeat,
-    var(--coral);color:var(--ink);font:500 1.6rem/1.48 Onest,system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+    var(--coral);color:var(--ink);font:500 1.6rem/1.48 Onest,system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased;container-type:inline-size}
 h1,h2,h3,p{margin:0}
 p{text-wrap:pretty}
 a{color:inherit;text-decoration:none}
@@ -65,8 +65,9 @@ img{display:block}
 .nav-menu{display:none}
 
 .hero{padding-top:15rem;text-align:center;display:flex;flex-direction:column;align-items:center;overflow-x:clip}
-/* Шире макета .wrap (1440) обрезал бы ленты: даём им выйти до краёв экрана, вбок страницу держит body{overflow-x:clip} */
-@media (min-width:1441px){.hero{overflow-x:visible}}
+/* Хиро во всю ширину страницы (100cqw — ширина body без полосы прокрутки) и сам обрезает ленты по краю:
+   шире экрана на странице ничего нет, сдвинуть её вбок нельзя. */
+.hero{margin-inline:calc(50% - 50cqw)}
 .pill{display:inline-flex;align-items:center;gap:1rem;height:4rem;padding:0 1.8rem;border-radius:2rem;background:rgba(22,17,14,.12);font-weight:800;line-height:1.25;letter-spacing:-.015em}
 .pill::before{content:"";width:.8rem;height:.8rem;border-radius:50%;background:#fff}
 h1{margin-top:2.4rem;width:108rem;max-width:100%;font-weight:900;font-size:9.2rem;line-height:1;letter-spacing:-.045em}
@@ -479,19 +480,19 @@ h1.sp em .wi::after{content:attr(data-t);position:absolute;left:0;top:0;color:va
     <article class="stat">
       <div class="chip" style="background:var(--cat-bakery)"><img decoding="async" src="img/croissant.png" alt=""></div>
       <div class="num">5–15%</div>
-      <h3>еды за день уходит в списание</h3>
+      <h3><span class="d">еды за день уходит в списание</span><span class="m">еды уходит в списание</span></h3>
       <p><span class="d">Выпечка и готовые блюда, которые к закрытию никто не купил.</span><span class="m">Выпечка и блюда, которые к закрытию никто не купил.</span></p>
     </article>
     <article class="stat">
       <div class="chip" style="background:var(--cat-beauty)"><img decoding="async" src="img/polish.png" alt=""></div>
       <div class="num">35–60 р.</div>
-      <h3>теряет мастер на поздней отмене</h3>
+      <h3>теряет мастер на отмене</h3>
       <p><span class="d">Клиентка отменила за час — найти замену почти невозможно.</span><span class="m">Клиентка отменила за час — замену не найти.</span></p>
     </article>
     <article class="stat">
       <div class="chip" style="background:var(--cat-cinema)"><img decoding="async" src="img/popcorn.png" alt=""></div>
       <div class="num">0 р.</div>
-      <h3><span class="d">приносит пустое кресло после начала</span><span class="m">приносит кресло после начала</span></h3>
+      <h3><span class="d">приносит пустое кресло в зале</span><span class="m">приносит пустое кресло</span></h3>
       <p><span class="d">Свет погас — непроданный билет больше ничего не стоит.</span><span class="m">Свет погас — билет больше ничего не стоит.</span></p>
     </article>
   </div>
