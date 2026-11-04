@@ -31,6 +31,7 @@ html{font-size:calc(min(100vw,1440px)/144);scroll-behavior:smooth;-webkit-text-s
 *{box-sizing:border-box}
 body{margin:0;background:var(--coral);color:var(--ink);font:500 1.6rem/1.48 Onest,system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
 h1,h2,h3,p{margin:0}
+p{text-wrap:pretty}
 a{color:inherit;text-decoration:none}
 button,input{font:inherit;color:inherit}
 img{display:block}
@@ -59,6 +60,8 @@ img{display:block}
 .nav-menu{display:none}
 
 .hero{padding-top:15rem;text-align:center;display:flex;flex-direction:column;align-items:center;overflow-x:clip}
+/* Шире макета .wrap (1440) обрезал бы ленты: даём им выйти до краёв экрана, вбок страницу держит body{overflow-x:clip} */
+@media (min-width:1441px){.hero{overflow-x:visible}}
 .pill{display:inline-flex;align-items:center;gap:1rem;height:4rem;padding:0 1.8rem;border-radius:2rem;background:rgba(22,17,14,.12);font-weight:800;line-height:1.25;letter-spacing:-.015em}
 .pill::before{content:"";width:.8rem;height:.8rem;border-radius:50%;background:#fff}
 h1{margin-top:2.4rem;width:108rem;max-width:100%;font-weight:900;font-size:9.2rem;line-height:1;letter-spacing:-.045em}
@@ -68,7 +71,7 @@ h1 em{font-style:normal;color:#fff}
 
 .stage{position:relative;width:144rem;height:62.4rem;margin:.4rem auto 0}
 .stage>*{position:absolute}
-.ribbon{left:50%;width:300rem;height:6.8rem;display:flex;align-items:center;justify-content:center;white-space:nowrap;font-weight:900;font-size:2.8rem;letter-spacing:-.035em}
+.ribbon{left:50%;width:max(300rem,calc(100vw + 40rem));height:6.8rem;display:flex;align-items:center;justify-content:center;white-space:nowrap;font-weight:900;font-size:2.8rem;letter-spacing:-.035em}
 .r1{top:47.6rem;background:var(--ink);color:var(--cream);transform:translate(-50%,-50%) rotate(4deg)}
 .r2{top:39rem;background:var(--amber);color:var(--ink);transform:translate(-50%,-50%) rotate(-3deg)}
 .phone{transform-origin:0 0;border-radius:13.9%/6.6%;box-shadow:0 2.4rem 4.8rem rgba(22,17,14,.3)}
@@ -87,7 +90,7 @@ h1 em{font-style:normal;color:#fff}
 .h2{font-weight:900;font-size:6.4rem;line-height:1;letter-spacing:-.045em}
 .why .h2{width:90rem;max-width:100%;margin:0 auto}
 .why .lead{width:76rem;max-width:100%;margin:2.4rem auto 0;font-size:2.2rem;color:var(--ink-2)}
-.stats{margin-top:5.6rem;display:grid;grid-template-columns:repeat(3,1fr);gap:2.4rem;text-align:left;align-items:start}
+.stats{margin-top:5.6rem;display:grid;grid-template-columns:repeat(3,1fr);gap:2.4rem;text-align:left;align-items:stretch}
 .stat{background:#fff;border-radius:3.2rem;padding:3.6rem;min-height:35.2rem}
 .chip{width:8.8rem;height:8.8rem;border-radius:2.6rem;display:grid;place-items:center}
 .chip img{width:8rem}
@@ -95,7 +98,7 @@ h1 em{font-style:normal;color:#fff}
 .stat h3{margin-top:1.6rem;font-weight:900;font-size:2.2rem;line-height:1.18;letter-spacing:-.03em}
 .stat p{margin-top:1rem;color:var(--ink-2)}
 
-.how{margin:2.4rem 2.4rem 0;display:grid;grid-template-columns:84rem 52.8rem;gap:2.4rem;align-items:start;position:relative;z-index:2}
+.how{margin:2.4rem 2.4rem 0;display:grid;grid-template-columns:84rem 52.8rem;gap:2.4rem;align-items:stretch;position:relative;z-index:2}
 .steps{background:#fff;border-radius:4.8rem;padding:6.4rem}
 .steps .h2{font-size:5.6rem}
 .step{margin-top:3.6rem;display:flex;gap:2.4rem}
@@ -103,7 +106,7 @@ h1 em{font-style:normal;color:#fff}
 .no{flex:none;width:6.4rem;height:6.4rem;border-radius:2.2rem;background:var(--coral);color:#fff;display:grid;place-items:center;font-weight:900;font-size:2.8rem;letter-spacing:-.035em}
 .step h3{font-weight:900;font-size:2.8rem;line-height:1.08;letter-spacing:-.035em}
 .step p{margin-top:.8rem;font-size:2rem;color:var(--ink-2)}
-.cinema{position:relative;height:58.3rem;background:var(--ink);border-radius:4.8rem;overflow:hidden}
+.cinema{position:relative;min-height:58.3rem;background:var(--ink);border-radius:4.8rem;overflow:hidden}
 .tag{position:absolute;left:4.8rem;top:4.8rem;display:flex;align-items:center;gap:.8rem;color:var(--amber);font-weight:800;font-size:1.1rem;line-height:1.2;letter-spacing:.1em;text-transform:uppercase}
 .tag .ic{width:1.8rem;height:1.8rem}
 .cinema img{position:absolute;left:10.3rem;top:10.8rem;width:32.2rem}
@@ -150,7 +153,7 @@ h1 em{font-style:normal;color:#fff}
 .faq{margin-top:2.4rem;background:var(--warm);border-radius:4.8rem;padding:9.6rem 7.6rem 7.6rem}
 .faq-top{display:flex;justify-content:space-between;align-items:flex-end}
 .ask{display:flex;align-items:center;gap:.8rem;font-weight:800;line-height:1.25;letter-spacing:-.015em;color:var(--ink-2)}
-.qs{margin-top:4.8rem;display:grid;grid-template-columns:1fr 1fr;gap:2.4rem;align-items:start}
+.qs{margin-top:4.8rem;display:grid;grid-template-columns:1fr 1fr;gap:2.4rem;align-items:stretch}
 details{background:#fff;border-radius:2.8rem;padding:3.2rem}
 summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:1.6rem;min-height:3.6rem;font-weight:900;font-size:2.2rem;line-height:1.18;letter-spacing:-.03em;cursor:pointer}
 summary::-webkit-details-marker{display:none}
@@ -231,9 +234,10 @@ details p{margin-top:1.2rem;color:var(--ink-2)}
   .steps .h2{font-size:3.4rem}
   .step,.steps .h2+.step{margin-top:2.4rem;gap:1.6rem}
   .no{width:4.8rem;height:4.8rem;border-radius:1.6rem;font-size:2rem}
+  .steps{--lw:.6rem;--lr:.5rem}
   .step h3{font-size:2rem;line-height:1.2;letter-spacing:-.03em}
   .step p{margin-top:.4rem;font-size:1.6rem}
-  .cinema{height:42rem;border-radius:3.2rem}
+  .cinema{min-height:42rem;border-radius:3.2rem}
   .tag{left:2.4rem;top:2.8rem}
   .tag .ic{width:1.6rem;height:1.6rem}
   .cinema img{left:6.1rem;top:7.2rem;width:24.8rem}
@@ -321,8 +325,17 @@ html.js:not(.live) :is(.stage .phone,.stage .st,.why .h2,.why .lead,.stat,.steps
 .no{position:relative;z-index:1}
 .no::after{content:"";position:absolute;inset:0;border-radius:inherit;background:var(--coral);opacity:0;pointer-events:none}
 .no.pulse::after{animation:pulse var(--t-big) var(--e-out)}
-.prog{position:absolute;width:.2rem;margin-left:-.1rem;border-radius:.1rem;background:rgba(22,17,14,.08)}
-.prog i{position:absolute;inset:0;border-radius:inherit;background:var(--coral);transform:scaleY(0);transform-origin:50% 0}
+/* Линия шагов: полоса --lw с вогнутыми скруглениями --lr там, где она входит в квадрат. Края на --lo заходят под квадрат. */
+.steps{--lw:.8rem;--lr:.6rem;--lo:.4rem}
+.prog{position:absolute;width:calc(var(--lw) + 2*var(--lr));margin-left:calc(var(--lw)/-2 - var(--lr));background:rgba(22,17,14,.07);
+  --cut:#0000 calc(var(--lr) - .5px),#000 var(--lr);
+  -webkit-mask:linear-gradient(#000 0 0) 50% 0/var(--lw) 100% no-repeat,linear-gradient(#000 0 0) 0 0/100% var(--lo) no-repeat,linear-gradient(#000 0 0) 0 100%/100% var(--lo) no-repeat,
+    radial-gradient(circle at 0 100%,var(--cut)) 0 var(--lo)/var(--lr) var(--lr) no-repeat,radial-gradient(circle at 100% 100%,var(--cut)) 100% var(--lo)/var(--lr) var(--lr) no-repeat,
+    radial-gradient(circle at 0 0,var(--cut)) 0 calc(100% - var(--lo))/var(--lr) var(--lr) no-repeat,radial-gradient(circle at 100% 0,var(--cut)) 100% calc(100% - var(--lo))/var(--lr) var(--lr) no-repeat;
+  mask:linear-gradient(#000 0 0) 50% 0/var(--lw) 100% no-repeat,linear-gradient(#000 0 0) 0 0/100% var(--lo) no-repeat,linear-gradient(#000 0 0) 0 100%/100% var(--lo) no-repeat,
+    radial-gradient(circle at 0 100%,var(--cut)) 0 var(--lo)/var(--lr) var(--lr) no-repeat,radial-gradient(circle at 100% 100%,var(--cut)) 100% var(--lo)/var(--lr) var(--lr) no-repeat,
+    radial-gradient(circle at 0 0,var(--cut)) 0 calc(100% - var(--lo))/var(--lr) var(--lr) no-repeat,radial-gradient(circle at 100% 0,var(--cut)) 100% calc(100% - var(--lo))/var(--lr) var(--lr) no-repeat}
+.prog i{position:absolute;inset:0;background:var(--coral);--p:0;clip-path:inset(0 0 calc(100% - var(--p)*100%) 0 round 0 0 calc(var(--lw)/2) calc(var(--lw)/2))}
 .price>span{transform-origin:0 100%}
 .price s.draw{position:relative;text-decoration:none}
 .price s i{position:absolute;left:0;right:0;top:54%;height:.1rem;background:currentColor;transform:scaleX(0);transform-origin:0 50%}
@@ -439,7 +452,7 @@ h1.sp em .wi::after{content:attr(data-t);position:absolute;left:0;top:0;color:va
 
 <section class="card why">
   <h2 class="h2">Это не акция. Это то, что через час пропадёт</h2>
-  <p class="lead"><span class="d">Каждый вечер город теряет выручку. Бизнесу выгоднее продать со скидкой, чем потерять всё. А тебе достаётся то же самое — только дешевле.</span><span class="m">Каждый вечер город теряет выручку. Бизнесу выгоднее продать со скидкой, чем потерять всё. А тебе — то же самое, только дешевле.</span></p>
+  <p class="lead"><span class="d">Каждый вечер город теряет выручку. Бизнесу выгоднее продать со скидкой, чем потерять всё. А тебе достаётся то же самое&nbsp;— только&nbsp;дешевле.</span><span class="m">Каждый вечер город теряет выручку. Бизнесу выгоднее продать со скидкой, чем потерять всё. А тебе&nbsp;— то же самое, только&nbsp;дешевле.</span></p>
   <div class="stats">
     <article class="stat">
       <div class="chip" style="background:var(--cat-bakery)"><img decoding="async" src="img/croissant.png" alt=""></div>
@@ -772,18 +785,28 @@ function boot(){
       },'top 82%');
     });
     if(reduce)return;
-    const line=document.createElement('i'),fill=document.createElement('i');
-    line.className='prog';line.append(fill);box.prepend(line);
+    // Два отрезка 1→2 и 2→3: у каждого свои скругления на входе в квадраты.
+    const segs=[0,1].map(()=>{
+      const line=document.createElement('i'),fill=document.createElement('i');
+      line.className='prog';line.append(fill);box.prepend(line);
+      return {line,fill};
+    });
     const place=()=>{
-      const a=$('.no',steps[0]),b=$('.no',steps[2]);
-      const top=a.offsetTop+a.offsetHeight;
-      line.style.left=a.offsetLeft+a.offsetWidth/2+'px';
-      line.style.top=top+'px';
-      line.style.height=b.offsetTop-top+'px';
+      const o=parseFloat(getComputedStyle(box).getPropertyValue('--lo'))*rem();
+      segs.forEach(({line},i)=>{
+        const a=$('.no',steps[i]),b=$('.no',steps[i+1]);
+        const top=a.offsetTop+a.offsetHeight-o;
+        line.style.left=a.offsetLeft+a.offsetWidth/2+'px';
+        line.style.top=top+'px';
+        line.style.height=b.offsetTop+o-top+'px';
+      });
     };
     place();
     ScrollTrigger.addEventListener('refreshInit',place);
-    gsap.to(fill,{scaleY:1,ease:'none',scrollTrigger:{trigger:steps[0],endTrigger:steps[2],start:'top 66%',end:'top 60%',scrub:.4}});
+    const len=i=>segs[i].line.offsetHeight||1;
+    gsap.timeline({scrollTrigger:{trigger:steps[0],endTrigger:steps[2],start:'top 66%',end:'top 60%',scrub:.4}})
+      .to(segs[0].fill,{'--p':1,ease:'none',duration:len(0)})
+      .to(segs[1].fill,{'--p':1,ease:'none',duration:len(1)});
   }
 
   function sceneCinema(){
