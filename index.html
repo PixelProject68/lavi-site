@@ -234,6 +234,7 @@ details p{margin-top:1.2rem;color:var(--ink-2)}
   .steps .h2{font-size:3.4rem}
   .step,.steps .h2+.step{margin-top:2.4rem;gap:1.6rem}
   .no{width:4.8rem;height:4.8rem;border-radius:1.6rem;font-size:2rem}
+  .steps{--lw:.6rem;--lr:.5rem}
   .step h3{font-size:2rem;line-height:1.2;letter-spacing:-.03em}
   .step p{margin-top:.4rem;font-size:1.6rem}
   .cinema{min-height:42rem;border-radius:3.2rem}
@@ -324,8 +325,17 @@ html.js:not(.live) :is(.stage .phone,.stage .st,.why .h2,.why .lead,.stat,.steps
 .no{position:relative;z-index:1}
 .no::after{content:"";position:absolute;inset:0;border-radius:inherit;background:var(--coral);opacity:0;pointer-events:none}
 .no.pulse::after{animation:pulse var(--t-big) var(--e-out)}
-.prog{position:absolute;width:.2rem;margin-left:-.1rem;border-radius:.1rem;background:rgba(22,17,14,.08)}
-.prog i{position:absolute;inset:0;border-radius:inherit;background:var(--coral);transform:scaleY(0);transform-origin:50% 0}
+/* Линия шагов: полоса --lw с вогнутыми скруглениями --lr там, где она входит в квадрат. Края на --lo заходят под квадрат. */
+.steps{--lw:.8rem;--lr:.6rem;--lo:.4rem}
+.prog{position:absolute;width:calc(var(--lw) + 2*var(--lr));margin-left:calc(var(--lw)/-2 - var(--lr));background:rgba(22,17,14,.07);
+  --cut:#0000 calc(var(--lr) - .5px),#000 var(--lr);
+  -webkit-mask:linear-gradient(#000 0 0) 50% 0/var(--lw) 100% no-repeat,linear-gradient(#000 0 0) 0 0/100% var(--lo) no-repeat,linear-gradient(#000 0 0) 0 100%/100% var(--lo) no-repeat,
+    radial-gradient(circle at 0 100%,var(--cut)) 0 var(--lo)/var(--lr) var(--lr) no-repeat,radial-gradient(circle at 100% 100%,var(--cut)) 100% var(--lo)/var(--lr) var(--lr) no-repeat,
+    radial-gradient(circle at 0 0,var(--cut)) 0 calc(100% - var(--lo))/var(--lr) var(--lr) no-repeat,radial-gradient(circle at 100% 0,var(--cut)) 100% calc(100% - var(--lo))/var(--lr) var(--lr) no-repeat;
+  mask:linear-gradient(#000 0 0) 50% 0/var(--lw) 100% no-repeat,linear-gradient(#000 0 0) 0 0/100% var(--lo) no-repeat,linear-gradient(#000 0 0) 0 100%/100% var(--lo) no-repeat,
+    radial-gradient(circle at 0 100%,var(--cut)) 0 var(--lo)/var(--lr) var(--lr) no-repeat,radial-gradient(circle at 100% 100%,var(--cut)) 100% var(--lo)/var(--lr) var(--lr) no-repeat,
+    radial-gradient(circle at 0 0,var(--cut)) 0 calc(100% - var(--lo))/var(--lr) var(--lr) no-repeat,radial-gradient(circle at 100% 0,var(--cut)) 100% calc(100% - var(--lo))/var(--lr) var(--lr) no-repeat}
+.prog i{position:absolute;inset:0;background:var(--coral);--p:0;clip-path:inset(0 0 calc(100% - var(--p)*100%) 0 round 0 0 calc(var(--lw)/2) calc(var(--lw)/2))}
 .price>span{transform-origin:0 100%}
 .price s.draw{position:relative;text-decoration:none}
 .price s i{position:absolute;left:0;right:0;top:54%;height:.1rem;background:currentColor;transform:scaleX(0);transform-origin:0 50%}
@@ -775,18 +785,28 @@ function boot(){
       },'top 82%');
     });
     if(reduce)return;
-    const line=document.createElement('i'),fill=document.createElement('i');
-    line.className='prog';line.append(fill);box.prepend(line);
+    // Два отрезка 1→2 и 2→3: у каждого свои скругления на входе в квадраты.
+    const segs=[0,1].map(()=>{
+      const line=document.createElement('i'),fill=document.createElement('i');
+      line.className='prog';line.append(fill);box.prepend(line);
+      return {line,fill};
+    });
     const place=()=>{
-      const a=$('.no',steps[0]),b=$('.no',steps[2]);
-      const top=a.offsetTop+a.offsetHeight;
-      line.style.left=a.offsetLeft+a.offsetWidth/2+'px';
-      line.style.top=top+'px';
-      line.style.height=b.offsetTop-top+'px';
+      const o=parseFloat(getComputedStyle(box).getPropertyValue('--lo'))*rem();
+      segs.forEach(({line},i)=>{
+        const a=$('.no',steps[i]),b=$('.no',steps[i+1]);
+        const top=a.offsetTop+a.offsetHeight-o;
+        line.style.left=a.offsetLeft+a.offsetWidth/2+'px';
+        line.style.top=top+'px';
+        line.style.height=b.offsetTop+o-top+'px';
+      });
     };
     place();
     ScrollTrigger.addEventListener('refreshInit',place);
-    gsap.to(fill,{scaleY:1,ease:'none',scrollTrigger:{trigger:steps[0],endTrigger:steps[2],start:'top 66%',end:'top 60%',scrub:.4}});
+    const len=i=>segs[i].line.offsetHeight||1;
+    gsap.timeline({scrollTrigger:{trigger:steps[0],endTrigger:steps[2],start:'top 66%',end:'top 60%',scrub:.4}})
+      .to(segs[0].fill,{'--p':1,ease:'none',duration:len(0)})
+      .to(segs[1].fill,{'--p':1,ease:'none',duration:len(1)});
   }
 
   function sceneCinema(){
