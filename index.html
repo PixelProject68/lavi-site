@@ -59,6 +59,8 @@ img{display:block}
 .nav-menu{display:none}
 
 .hero{padding-top:15rem;text-align:center;display:flex;flex-direction:column;align-items:center;overflow-x:clip}
+/* Шире макета .wrap (1440) обрезал бы ленты: даём им выйти до краёв экрана, вбок страницу держит body{overflow-x:clip} */
+@media (min-width:1441px){.hero{overflow-x:visible}}
 .pill{display:inline-flex;align-items:center;gap:1rem;height:4rem;padding:0 1.8rem;border-radius:2rem;background:rgba(22,17,14,.12);font-weight:800;line-height:1.25;letter-spacing:-.015em}
 .pill::before{content:"";width:.8rem;height:.8rem;border-radius:50%;background:#fff}
 h1{margin-top:2.4rem;width:108rem;max-width:100%;font-weight:900;font-size:9.2rem;line-height:1;letter-spacing:-.045em}
@@ -68,7 +70,7 @@ h1 em{font-style:normal;color:#fff}
 
 .stage{position:relative;width:144rem;height:62.4rem;margin:.4rem auto 0}
 .stage>*{position:absolute}
-.ribbon{left:50%;width:300rem;height:6.8rem;display:flex;align-items:center;justify-content:center;white-space:nowrap;font-weight:900;font-size:2.8rem;letter-spacing:-.035em}
+.ribbon{left:50%;width:max(300rem,calc(100vw + 40rem));height:6.8rem;display:flex;align-items:center;justify-content:center;white-space:nowrap;font-weight:900;font-size:2.8rem;letter-spacing:-.035em}
 .r1{top:47.6rem;background:var(--ink);color:var(--cream);transform:translate(-50%,-50%) rotate(4deg)}
 .r2{top:39rem;background:var(--amber);color:var(--ink);transform:translate(-50%,-50%) rotate(-3deg)}
 .phone{transform-origin:0 0;border-radius:13.9%/6.6%;box-shadow:0 2.4rem 4.8rem rgba(22,17,14,.3)}
