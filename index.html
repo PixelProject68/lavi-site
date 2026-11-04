@@ -29,7 +29,12 @@
 }
 html{font-size:calc(min(100vw,1440px)/144);scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 *{box-sizing:border-box}
-body{margin:0;background:var(--coral);color:var(--ink);font:500 1.6rem/1.48 Onest,system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+body{margin:0;
+  /* Плоский коралл давил: светлее у заголовка, янтарное свечение за телефонами, ниже — обычный коралл */
+  background:radial-gradient(70rem 44rem at 50% 26rem,rgba(255,196,140,.5),rgba(255,196,140,0) 70%) 50% 0/100% 160rem no-repeat,
+    radial-gradient(90rem 40rem at 50% 104rem,rgba(255,178,30,.34),rgba(255,178,30,0) 70%) 50% 0/100% 160rem no-repeat,
+    linear-gradient(180deg,#EF7A45 0,var(--coral) 70rem,#DE5523 130rem,var(--coral) 160rem) 50% 0/100% 160rem no-repeat,
+    var(--coral);color:var(--ink);font:500 1.6rem/1.48 Onest,system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
 h1,h2,h3,p{margin:0}
 p{text-wrap:pretty}
 a{color:inherit;text-decoration:none}
@@ -74,7 +79,22 @@ h1 em{font-style:normal;color:#fff}
 .ribbon{left:50%;width:max(300rem,calc(100vw + 40rem));height:6.8rem;display:flex;align-items:center;justify-content:center;white-space:nowrap;font-weight:900;font-size:2.8rem;letter-spacing:-.035em}
 .r1{top:47.6rem;background:var(--ink);color:var(--cream);transform:translate(-50%,-50%) rotate(4deg)}
 .r2{top:39rem;background:var(--amber);color:var(--ink);transform:translate(-50%,-50%) rotate(-3deg)}
-.phone{transform-origin:0 0;border-radius:13.9%/6.6%;box-shadow:0 2.4rem 4.8rem rgba(22,17,14,.3)}
+/* Телефон. .phone — позиция и анимации сцены, .dev — корпус: титановая рамка с бликами, торец справа снизу (свет сверху слева),
+   блик на стекле, тёплые тени под цвет фона. На наведение .dev наклоняется к курсору (--rx/--ry), блик едет (--gx). */
+.phone{transform-origin:0 0;perspective:140rem}
+.dev{position:relative;padding:1.2%;border-radius:15%/7.15%;
+  background:linear-gradient(140deg,#b9b2ab 0%,#4a4340 14%,#1f1a17 38%,#2b2522 62%,#5a524d 86%,#c9c1b9 100%);
+  box-shadow:inset 0 0 0 .1rem rgba(255,255,255,.22),inset 0 0 0 .25rem rgba(0,0,0,.35),
+    .2rem .3rem 0 #2e2723,.45rem .6rem 0 #1a1513,
+    0 1rem 1.8rem rgba(74,22,2,.26),0 3.2rem 5.6rem -.8rem rgba(74,22,2,.42),0 6.4rem 10rem -2.4rem rgba(74,22,2,.3);
+  transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(var(--tz,0px));
+  transition:transform .7s var(--e-out)}
+.dev img{width:100%;border-radius:13.9%/6.6%}
+.dev::after{content:"";position:absolute;inset:1.2%;border-radius:13.9%/6.6%;pointer-events:none;
+  background:linear-gradient(116deg,rgba(255,255,255,.2) 0%,rgba(255,255,255,.07) 12%,rgba(255,255,255,0) 20%,rgba(255,255,255,0) 37%,rgba(255,255,255,.06) 50%,rgba(255,255,255,0) 60%) var(--gx,0%) 0/200% 100% no-repeat;
+  transition:background-position .7s var(--e-out)}
+.dev.tilt{transition-duration:.25s}
+.dev.tilt::after{transition-duration:.25s}
 .ph-o{left:25rem;top:14.6rem;width:27.3rem;transform:rotate(-8deg)}
 .ph-m{left:92rem;top:11.6rem;width:27.3rem;transform:rotate(8deg)}
 .ph-h{left:55.5rem;top:7.6rem;width:33rem}
@@ -111,7 +131,7 @@ h1 em{font-style:normal;color:#fff}
 .cinema{position:relative;min-height:58.3rem;background:var(--ink);border-radius:4.8rem;overflow:hidden}
 .tag{position:absolute;left:4.8rem;top:4.8rem;display:flex;align-items:center;gap:.8rem;color:var(--amber);font-weight:800;font-size:1.1rem;line-height:1.2;letter-spacing:.1em;text-transform:uppercase}
 .tag .ic{width:1.8rem;height:1.8rem}
-.cinema img{position:absolute;left:10.3rem;top:10.8rem;width:32.2rem}
+.cinema .phone{position:absolute;left:10.3rem;top:10.8rem;width:32.2rem}
 
 .catch{padding:12.8rem 6.5rem 0;position:relative;z-index:2}
 .catch .h2{width:100rem;max-width:100%;margin:0 auto;font-size:7.2rem;color:#fff;text-align:center}
@@ -242,7 +262,7 @@ details p{margin-top:1.2rem;color:var(--ink-2)}
   .cinema{min-height:42rem;border-radius:3.2rem}
   .tag{left:2.4rem;top:2.8rem}
   .tag .ic{width:1.6rem;height:1.6rem}
-  .cinema img{left:6.1rem;top:7.2rem;width:24.8rem}
+  .cinema .phone{left:6.1rem;top:7.2rem;width:24.8rem}
 
   .catch{padding:7.2rem 2rem 0}
   .catch .h2{font-size:3.4rem}
@@ -313,7 +333,7 @@ details p{margin-top:1.2rem;color:var(--ink-2)}
   --e-out:cubic-bezier(.16,1,.3,1);--e-exit:cubic-bezier(.7,0,.84,0);--e-spring:cubic-bezier(.34,1.56,.64,1);
   --g-out:expo.out;--g-arc:power3.out;--g-exit:power3.in;--g-spring:back.out(1.4);
 }
-html.js:not(.live) :is(.stage .phone,.stage .st,.why .h2,.why .lead,.stat,.steps .h2,.step,.cinema .tag,.cinema img,.catch .h2,.tile,.biz-text>*,.feat,.ph-b,.faq-top,details,.wait>*,.foot .word){opacity:0}
+html.js:not(.live) :is(.stage .phone,.stage .st,.why .h2,.why .lead,.stat,.steps .h2,.step,.cinema .tag,.cinema .phone,.catch .h2,.tile,.biz-text>*,.feat,.ph-b,.faq-top,details,.wait>*,.foot .word){opacity:0}
 .track{flex:none;white-space:nowrap}
 .wait,.catch{overflow-x:clip}
 .w{display:inline-block;overflow:hidden;vertical-align:top;padding:.16em .08em .2em;margin:-.16em -.08em -.2em}
@@ -442,9 +462,9 @@ h1.sp em .wi::after{content:attr(data-t);position:absolute;left:0;top:0;color:va
   <div class="stage" aria-hidden="true">
     <div class="ribbon r1">Люби ловить  ✦  ЛАВі  ✦  Люби ловить  ✦  ЛАВі  ✦  Люби ловить  ✦  ЛАВі  ✦  Люби ловить  ✦  ЛАВі  ✦  Люби ловить  ✦  ЛАВі  ✦  Люби ловить  ✦  ЛАВі  ✦  Люби ловить  ✦  ЛАВі  ✦  Люби ловить  ✦  ЛАВі  ✦  Люби ловить</div>
     <div class="ribbon r2">Еда  ✦  Красота  ✦  Кино  ✦  Досуг  ✦  Туры  ✦  Еда  ✦  Красота  ✦  Кино  ✦  Досуг  ✦  Туры  ✦  Еда  ✦  Красота  ✦  Кино  ✦  Досуг  ✦  Туры  ✦  Еда  ✦  Красота  ✦  Кино  ✦  Досуг  ✦  Туры  ✦  Еда  ✦  Красота  ✦  Кино  ✦  Досуг  ✦  Туры</div>
-    <img class="phone ph-o" src="img/phone-orbita.png" alt="">
-    <img class="phone ph-m" src="img/phone-master.png" alt="">
-    <img class="phone ph-h" src="img/phone-home.png" alt="">
+    <div class="phone ph-o"><div class="dev"><img src="img/phone-orbita.png" alt=""></div></div>
+    <div class="phone ph-m"><div class="dev"><img src="img/phone-master.png" alt=""></div></div>
+    <div class="phone ph-h"><div class="dev"><img src="img/phone-home.png" alt=""></div></div>
     <img class="st s1" src="img/croissant.png" alt="">
     <img class="st s2" src="img/popcorn.png" alt="">
     <img class="st s3" src="img/suitcase.png" alt="">
@@ -486,7 +506,7 @@ h1.sp em .wi::after{content:attr(data-t);position:absolute;left:0;top:0;color:va
   </div>
   <div class="cinema">
     <div class="tag"><svg class="ic" aria-hidden="true"><use href="#clock"/></svg>Кино за 27 мин до сеанса</div>
-    <img decoding="async" class="phone" src="img/phone-orbita.png" alt="Экран приложения: кинотеатр «Орбита»">
+    <div class="phone"><div class="dev"><img decoding="async" src="img/phone-orbita.png" alt="Экран приложения: кинотеатр «Орбита»"></div></div>
   </div>
 </section>
 
@@ -535,7 +555,7 @@ h1.sp em .wi::after{content:attr(data-t);position:absolute;left:0;top:0;color:va
     </div>
     <a class="btn btn-coral" href="#waitlist" data-seg="biz">Стать партнёром <svg class="ic" aria-hidden="true"><use href="#arrow"/></svg></a>
   </div>
-  <img decoding="async" class="phone ph-b" src="img/phone-okoshko.png" alt="Экран приложения: окошко мастера">
+  <div class="phone ph-b"><div class="dev"><img decoding="async" src="img/phone-okoshko.png" alt="Экран приложения: окошко мастера"></div></div>
 </section>
 
 <section class="card faq" id="faq">
@@ -656,7 +676,7 @@ try{
     if(!window.gsap||!window.ScrollTrigger)throw new Error('gsap');
     boot();
   }
-}catch(e){motionOff()}
+}catch(e){console.error(e);motionOff()}
 
 function boot(){
   const {gsap,ScrollTrigger}=window;
@@ -812,7 +832,7 @@ function boot(){
   }
 
   function sceneCinema(){
-    const tag=$('.cinema .tag'),img=$('.cinema img');
+    const tag=$('.cinema .tag'),img=$('.cinema .phone');
     hide(tag,{o:0});hide(img,{y:5,o:0});
     once('.cinema',()=>{
       play(img,{d:.9,fade:.9});
@@ -1051,7 +1071,7 @@ function boot(){
       tl.to(r,{ex:0,er:0,es:1,duration:.62,ease:M.spring},t).to(r,{ey:0,duration:.62,ease:M.out},t).to(r,{eo:1,duration:.1,ease:'none'},t);
       tl.call(()=>{r.on=true},null,t+.62);
     };
-    const ready=Promise.race([Promise.all([ph.h,ph.o,ph.m].map(r=>r.el.decode().catch(()=>{}))),new Promise(r=>setTimeout(r,250))]);
+    const ready=Promise.race([Promise.all([ph.h,ph.o,ph.m].map(r=>r.el.querySelector("img").decode().catch(()=>{}))),new Promise(r=>setTimeout(r,250))]);
     ready.then(()=>once(stage,entrance,'top 94%'));
     if(innerWidth>=1000)once('.s3',()=>{
       if(reduce)return gsap.to(st.slice(2),{eo:1,duration:M.ui,ease:'none'});
@@ -1103,6 +1123,25 @@ function boot(){
       track.style.transform=`translate3d(${(dir>0?-x:x-period).toFixed(2)}px,0,0)`;
     }};
   }
+}
+
+// Наклон телефонов за курсором: только мышь и только если пользователь не просил меньше движения.
+if(matchMedia('(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference)').matches){
+  document.querySelectorAll('.phone').forEach(ph=>{
+    const d=ph.querySelector('.dev');if(!d)return;
+    ph.addEventListener('pointermove',e=>{
+      const r=d.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+      d.classList.add('tilt');
+      d.style.setProperty('--ry',(x*16).toFixed(2)+'deg');
+      d.style.setProperty('--rx',(-y*12).toFixed(2)+'deg');
+      d.style.setProperty('--tz','2rem');
+      d.style.setProperty('--gx',(x*60).toFixed(1)+'%');
+    });
+    ph.addEventListener('pointerleave',()=>{
+      d.classList.remove('tilt');
+      for(const v of ['--rx','--ry','--tz','--gx'])d.style.removeProperty(v);
+    });
+  });
 }
 </script>
 </body>
